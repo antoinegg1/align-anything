@@ -1148,6 +1148,28 @@ class RLAIFV:
             'text': formatted_prompt,
             'image': image,
         }
+    
+    def format_supervised_sample(self, raw_sample: dict[str, Any]) -> dict[str, Any]:
+        better_response = raw_sample['chosen']
+        prompt = raw_sample['question']
+        image = raw_sample['image']
+
+        formatted_prompt = (
+            f'{self.system_prompt}'
+            f'{self.user_prompt.format(input=prompt)}'
+        )
+        formatted_better_output = (
+            f'{self.assistant_prompt.format(output=better_response)}'
+        )
+        formatted_worse_output = (
+            f'{self.assistant_prompt.format(output=worse_response)}'
+        )
+
+        return {
+            'prompt': formatted_prompt,
+            'text': formatted_better_output,
+            'image': image,
+        }
 
 
 @register_template('SPA_VL')
@@ -1200,6 +1222,28 @@ class SPA_VL:
         return {
             'text': formatted_prompt,
             'image': image,
+        }
+    def format_sample(self, raw_sample: dict[str, Any]) -> dict[str, Any]:
+        prompt = raw_sample['question'].replace('<image>\n', '').replace('\n<image>', '').replace('<image>', '')
+        image = raw_sample['image']
+
+        formatted_prompt = (
+            f'{self.system_prompt}'
+            f'{self.user_prompt.format(input=prompt)}'
+            f'{self.assistant_prompt.format(output="")}'
+        )
+        better_response = raw_sample['chosen']
+        text = (
+            f'{self.system_prompt}'
+            f'{self.user_prompt.format(input=prompt)}'
+            f"{self.assistant_prompt.format(output=better_response)}"
+        )
+        image = image.convert('RGBA')
+
+        return {
+            'prompt': formatted_prompt,
+            'image': image,
+            'text':text,
         }
 
 

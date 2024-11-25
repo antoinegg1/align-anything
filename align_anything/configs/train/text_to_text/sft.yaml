@@ -22,11 +22,11 @@ train_cfgs:
   # Seed for random number generator
   seed: 42
   # Batch size per device for training
-  per_device_train_batch_size: 4
+  per_device_train_batch_size: 8
   # Batch size per device for evaluation
   per_device_eval_batch_size: 4
   # The number of gradient accumulation steps
-  gradient_accumulation_steps: 16
+  gradient_accumulation_steps: 1
   # Whether to use gradient checkpointing
   gradient_checkpointing: True
   # Initial learning rate
@@ -94,7 +94,7 @@ logger_cfgs:
   # The directory to cache the downloaded model
   cache_dir: null
   # The interval of saving models
-  save_interval: 100000
+  save_interval: 100
 # The model configurations
 model_cfgs:
   # Pretrained model name or path

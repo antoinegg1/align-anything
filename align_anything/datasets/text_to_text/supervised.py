@@ -115,7 +115,7 @@ class SupervisedDataset(Dataset):
         """Tokenize a text string into a tensor representation."""
         if max_length is None:
             max_length = self.tokenizer.model_max_length
-
+        max_length=4096
         return self.tokenizer(
             text,
             add_special_tokens=add_special_tokens,

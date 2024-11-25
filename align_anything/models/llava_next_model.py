@@ -401,15 +401,7 @@ class AccustomedLlavaNextModel(LlavaNextForConditionalGeneration):
         >>> processor.batch_decode(generate_ids, skip_special_tokens=True, clean_up_tokenization_spaces=False)[0]
         "[INST]  \nWhat is shown in this image? [/INST] The image appears to be a radar chart, which is a type of multi-dimensional plot (...)"
         ```"""
-
-        # reset the variable' means
-        # 'image_sizes' pass in the forward function need to transform to 'ori_image_num_patches' (special design for llava-next patches recovery)
-        # 'image_sizes' should be calculated again = (H, W) * B
-        ori_image_num_patches = image_sizes
-        a = pixel_values.shape[2]
-        b = pixel_values.shape[3]
-        image_sizes = [[a, b]] * len(image_sizes)
-
+        
         output_attentions = (
             output_attentions if output_attentions is not None else self.config.output_attentions
         )
@@ -429,6 +421,16 @@ class AccustomedLlavaNextModel(LlavaNextForConditionalGeneration):
             if vision_feature_select_strategy is not None
             else self.config.vision_feature_select_strategy
         )
+
+        # reset the variable' means
+        # 'image_sizes' pass in the forward function need to transform to 'ori_image_num_patches' (special design for llava-next patches recovery)
+        # 'image_sizes' should be calculated again = (H, W) * B
+    
+        if pixel_values is not None:
+            ori_image_num_patches = image_sizes
+            a = pixel_values.shape[2]
+            b = pixel_values.shape[3]
+            image_sizes = [[a, b]] * len(image_sizes)
 
         image_to_overwrite = None
         if inputs_embeds is None:
@@ -501,6 +503,7 @@ class AccustomedLlavaNextModel(LlavaNextForConditionalGeneration):
                     image_features,
                     image_sizes,
                     image_newline=self.image_newline,
+                    vision_feature_select_strategy=vision_feature_select_strategy,
                 )
 
                 inputs_embeds = inputs_embeds.to(image_features.dtype)

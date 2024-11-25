@@ -35,7 +35,7 @@ import yaml
 from PIL import Image
 import torch.utils.data
 from scipy.stats import entropy
-from moviepy.editor import AudioFileClip
+# from moviepy.editor import AudioFileClip
 from torch.nn.utils.rnn import pad_sequence
 from torch.types import Number
 from torch.autograd import Variable
@@ -514,7 +514,8 @@ def download_audio(youtube_id, start_time, audiocap_id, output_dir):
     audio_path = os.path.join(output_dir, f'{audiocap_id}.webm')
     
     try:
-        audio_clip = AudioFileClip(audio_path)
+        # audio_clip = AudioFileClip(audio_path)
+
         end_time = audio_clip.duration
         start_time_sec = float(start_time)
         audio_segment = audio_clip.subclip(start_time_sec, min(end_time, start_time_sec + 10))
